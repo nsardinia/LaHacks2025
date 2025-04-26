@@ -51,15 +51,13 @@ class gemini:
             
             filename = f"ocr_frame_{frame_counter}.json"
             data = {
-                "start_time":time*10,
-                "end_time": time*10 + 10,
+                "start_time":frame_counter*10,
+                "end_time": frame_counter*10 + 10,
                 "text": i
             }
             with open(filename, "w") as f:
                 json.dump(data, f, indent=2)
             frame_counter += 1
-
-            json.dumps(data)
 
 
 '''
