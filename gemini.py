@@ -1,10 +1,9 @@
 from google import genai
 from google.genai import types
 from PIL import Image
-import start
+
 from key import TOKEN
 from paddleocr import PaddleOCR
-
 
 class gemini:
     def __init__(self, token, text=None):
@@ -68,8 +67,75 @@ class gemini:
                 json.dump(data, f, indent=2)
             frame_counter += 1
 
+import cv2
+
+
+
+def process_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+
+    if not cap.isOpened():
+        print("Error: Could not open video.")
+        return
+
+    slides_info = ""
+    frame_number = 0
+    while True:
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        if frame_number % 480 == 0:
+            frame_filename = f"frame_{frame_number:04d}.jpg"
+            cv2.imwrite(frame_filename, frame)
+            formatted = PaddleProcessWords(frame_filename)
+            slides_info += f"Frame Number: {frame_number}\n"
+            slides_info += f"{formatted}\n"
+        frame_number += 1
+    
+    return slides_info
+
+
+
+
+import cv2
+from paddleocr import PaddleOCR
+
+# Paddleocr supports Chinese, English, French, German, Korean and Japanese
+# You can set the parameter `lang` as `ch`, `en`, `french`, `german`, `korean`, `japan`
+# to switch the language model in order
+
+
+
+def PaddleProcessWords(img_path):
+    ocr = PaddleOCR(use_angle_cls=True, lang='en') # need to run only once to download and load model into memory
+
+
+    # img_path = '/Users/bensirivallop/LA HACKS/LaHacks2025/Screenshot1.png'
+
+    result = ocr.ocr(img_path, cls=True)
+
+    res =0
+    for idx in range(len(result)):
+        res = result[idx]
+    res_sorted = None
+    if res is not None:
+        res_sorted = sorted(res, key=lambda x: (x[0][0][1], x[0][0][1]))
+
+    string = ''
+    if res_sorted is not None:
+        for line in res_sorted:
+            formatted_line = f"Text: {line[1][0]}, Confidence: {line[1][1]}"
+            print(formatted_line)
+            string += formatted_line
+            string += "\n"
+    return string
+
+
+
 if __name__ == "__main__":
-    text = start.process_video("videoplayback.mp4")
+    text = process_video("videoplayback.mp4")
     ai = gemini(TOKEN, text)
     ai.refine(text)
 
