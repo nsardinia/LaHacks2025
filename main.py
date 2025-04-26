@@ -5,22 +5,25 @@ from io import BytesIO
 import base64
 from key import TOKEN
 
+class gemini:
+    def __init__(self, token):
+        self.client = genai.Client(api_key=token)
 
-client = genai.Client(api_key=TOKEN)
 
-#initial read
+    def process(self, image):
 
-for i i n
-image = Image.open("/screenshot")
-response = client.models.generate_content(
-    model="gemini-2.5-flash-preview-04-17",  contents=[image, "Gather the necessary/relevant text in the image."]
-)
+        #initial read
+        image = Image.open("/screenshot")
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=[image, "Gather the necessary/relevant text in the image."]
+        )
 
-#fill in the gaps/bad data
-img_response = client.models.generate_content(
-    model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the data. If unclear, label it"]
-)
+        #fill in the gaps/bad data
+        img_response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the data. If unclear, label it"]
+        )
 
+        print(img_response.text)
 
 #This generates an image.
 '''
@@ -48,5 +51,4 @@ for part in img_gen_response.candidates[0].content.parts:
 
 
 
-print(response.text)
-print(img_response.text)
+
