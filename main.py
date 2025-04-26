@@ -1,6 +1,7 @@
 from google import genai
 from google.genai import types
 from PIL import Image
+from paddleocr import PaddleOCR
 
 
 class gemini:
@@ -12,6 +13,7 @@ class gemini:
 
     def process(self, string):
 
+        #not used anymore because we use paddle for word recog
         # #initial read
         # image = Image.open("/screenshot")
         # response = self.client.models.generate_content(
@@ -20,7 +22,7 @@ class gemini:
 
         #fill in the gaps/bad data
         img_response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the text. If unclear, label it"]
+            model="gemini-2.5-flash-preview-04-17",  contents=[string, "find and fix errors in the text. If unclear, label it"]
         )
 
         self.content.append(img_response)
@@ -35,9 +37,33 @@ class gemini:
     def get_summary(self):
         return self.summary
 
+    def prompt(self, string):
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=['\n'.join(self.content), "summarize the information in this text"]
+        )
+        return respons
 
 
 
+def PaddleProcessWords(img_path):
+    ocr = PaddleOCR(use_angle_cls=True, lang='en') # need to run only once to download and load model into memory
+
+
+    # img_path = '/Users/bensirivallop/LA HACKS/LaHacks2025/Screenshot1.png'
+
+    result = ocr.ocr(img_path, cls=True)
+
+    res = 0
+    for idx in range(len(result)):
+        res = result[idx]
+    res_sorted = sorted(res, key=lambda x: (x[0][0][1], x[0][0][1]))
+
+    string = ''
+    for line in res_sorted:
+        print(line)
+        string += line[1][0]
+    print(string)
+    
 
 #This generates an image.
 '''

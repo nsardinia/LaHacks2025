@@ -10,24 +10,6 @@ from paddleocr import PaddleOCR, draw_ocr
 
 
 
-def PaddleProcessWords(img_path):
-    ocr = PaddleOCR(use_angle_cls=True, lang='en') # need to run only once to download and load model into memory
-
-
-    # img_path = '/Users/bensirivallop/LA HACKS/LaHacks2025/Screenshot1.png'
-
-    result = ocr.ocr(img_path, cls=True)
-
-    res =0
-    for idx in range(len(result)):
-        res = result[idx]
-    res_sorted = sorted(res, key=lambda x: (x[0][0][1], x[0][0][1]))
-
-    string = ''
-    for line in res_sorted:
-        print(line)
-        string += line[1][0]
-    print(string)
 
 
 def PaddleProcessMath():

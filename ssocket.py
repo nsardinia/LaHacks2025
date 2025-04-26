@@ -4,11 +4,8 @@ import asyncio
 import websockets
 import cv2
 import numpy as np
-from start import PaddleProcessWords
+from main import PaddleProcessWords
 import time
-
-
-
 from main import gemini
 from key import TOKEN
 
@@ -24,7 +21,7 @@ async def video_receiver(websocket, gemini_):
             
             if frame is not None:
                 frame_counter+=1
-                if frame_counter >= 00: #this captures a frame every 20 seconds.
+                if frame_counter >= 300: #this captures a frame every 20 seconds.
                     gemini_.process(PaddleProcessWords(frame))
                     frame_counter = 0
                 if cv2.waitKey(1) & 0xFF == ord('q'):
