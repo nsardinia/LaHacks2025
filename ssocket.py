@@ -24,8 +24,8 @@ async def video_receiver(websocket, gemini_):
             
             if frame is not None:
                 frame_counter+=1
-                if frame_counter >= 600: #this captures a frame every 20 seconds.
-                    gemini_.process(PaddleProcessWords(fram))
+                if frame_counter >= 00: #this captures a frame every 20 seconds.
+                    gemini_.process(PaddleProcessWords(frame))
                     frame_counter = 0
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
