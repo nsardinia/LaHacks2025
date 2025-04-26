@@ -28,15 +28,10 @@ def PaddleProcessWords(img_path):
     string = ''
     if res_sorted is not None:
         for line in res_sorted:
-<<<<<<< HEAD
             formatted_line = f"Text: {line[1][0]}, Confidence: {line[1][1]}"
             print(formatted_line)
             string += formatted_line
             string += "\n"
-=======
-            print(line)
-            string += line[1][0]
->>>>>>> 8ab48cd9e74313204c553b35eb5d0d0b3f99cfd6
     return string
 
 
