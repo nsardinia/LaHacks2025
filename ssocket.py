@@ -28,11 +28,11 @@ async def video_receiver(websocket, gemini_):
     except websockets.exceptions.ConnectionClosed:
         print("Client disconnected")
     finally:
-        cv2.destroyAllWindows()
+        cv2.destroyAllWindows() 
 
 
 async def main(gemin):
-    #FILL IN THIS IP ADDRESS
+    #FILL IN THIS IP ADDRESS 
 
     async def handler(websocket):
         await video_receiver(websocket, gemin) # Pass the instance
