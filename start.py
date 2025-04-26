@@ -16,7 +16,7 @@ for idx in range(len(result)):
         print(line)
 
 # # draw result
-# from PIL import Image
+# from PIL import Image 
 # result = result[0]
 # image = Image.open(img_path).convert('RGB')
 # boxes = [line[0] for line in result]
