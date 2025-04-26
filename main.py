@@ -3,17 +3,21 @@ from google.genai import types
 from PIL import Image
 import start
 from key import TOKEN
+from paddleocr import PaddleOCR
+
 
 class gemini:
     def __init__(self, token, text=None):
         self.client = genai.Client(api_key=token)
-        self.content = []
+        self.content=[]
         self.summary = None
         self.text = text
+        self.files = []
 
 
     def process(self, string):
 
+        #not used anymore because we use paddle for word recog
         # #initial read
         # image = Image.open("/screenshot")
         # response = self.client.models.generate_content(
@@ -37,6 +41,44 @@ class gemini:
     def get_summary(self):
         return self.summary
 
+    def prompt(self, string):
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=['\n'.join(self.content), string]
+        )
+        return response
+
+    def toJson(self):
+        import json
+        frame_counter =0
+        for i in self.content:
+            
+            filename = f"ocr_frame_{frame_counter}.json"
+            data = {
+                "start_time":frame_counter*10,
+                "end_time": frame_counter*10 + 10,
+                "text": i
+            }
+            with open(filename, "w") as f:
+                json.dump(data, f, indent=2)
+            frame_counter += 1
+
+
+'''
+EXMAPLE JSON
+"video_path": "./data/test_lecture.mp4",
+        "start_time": 0,
+        "end_time": 10,
+        "transcription": " So today we're going to go over some D-Log concepts. So the first thing that we're going to talk about today is just how to wire up a switch.",
+        "tags": [
+            {
+                "tag": "D-Log",
+                "score": 0.9
+            },
+            {
+                "tag": "switch wiring",
+                "score": 0.7
+            }
+        ]
 
     def refine(self, text):
         response = self.client.models.generate_content(
@@ -50,6 +92,8 @@ if __name__ == "__main__":
     ai = gemini(TOKEN, text)
     ai.refine(text)
 
+
+'''
 
 #This generates an image.
 '''
