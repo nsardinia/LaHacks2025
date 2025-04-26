@@ -4,17 +4,9 @@ import asyncio
 import websockets
 import cv2
 import numpy as np
-
+from start import PaddleProcessWords
 import time
 
-
-
-# --- your code here ---
-time.sleep(3)  # simulate some work
-
-end = time.time()
-
-print(f"Elapsed time: {end - start:.2f} seconds")
 
 
 from main import gemini
@@ -33,7 +25,7 @@ async def video_receiver(websocket, gemini_):
             if frame is not None:
                 frame_counter+=1
                 if frame_counter >= 600: #this captures a frame every 20 seconds.
-                    gemini_.process(frame)
+                    gemini_.process(PaddleProcessWords(fram))
                     frame_counter = 0
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
@@ -45,7 +37,7 @@ async def video_receiver(websocket, gemini_):
 
 async def main(gemin):
     #FILL IN THIS IP ADDRESS 
-
+    start = time.time()
 
 
     async def handler(websocket):
@@ -54,6 +46,8 @@ async def main(gemin):
     async with websockets.serve(handler, "0.0.0.0", 8765):
         print("WebSocket server started")
         await asyncio.Future()  # run forever
+
+    end = time.time()
 
 if __name__ == "__main__":
     gemin = gemini(TOKEN)

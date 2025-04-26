@@ -10,13 +10,13 @@ class gemini:
         self.summary = None
 
 
-    def process(self, image):
+    def process(self, string):
 
-        #initial read
-        image = Image.open("/screenshot")
-        response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=[image, "gather the information available in the text"]
-        )
+        # #initial read
+        # image = Image.open("/screenshot")
+        # response = self.client.models.generate_content(
+        #     model="gemini-2.5-flash-preview-04-17",  contents=[image, "gather the information available in the text"]
+        # )
 
         #fill in the gaps/bad data
         img_response = self.client.models.generate_content(
