@@ -35,25 +35,6 @@ def PaddleProcessWords(img_path):
     return string
 
 
-def PaddleProcessMath():
-    from paddlex import create_pipeline
-
-    pipeline = create_pipeline(pipeline="formula_recognition")
-
-    output = pipeline.predict(
-        input="./Screenshot1.png",
-        use_layout_detection=True ,
-        use_doc_orientation_classify=False, #we can say yes, but prolly inef
-        use_doc_unwarping=False, # we can do yes, but probably inef
-        layout_threshold=0.5,
-        layout_nms=True,
-        layout_unclip_ratio=1.0,
-        layout_merge_bboxes_mode="large"
-    )
-    for res in output:
-        # res.print()
-        # res.save_to_img(save_path="./layout_output/")
-        res.save_to_json(save_path="./layout_output/")
 
 def process_video(video_path):
     cap = cv2.VideoCapture(video_path)
@@ -131,4 +112,26 @@ if __name__== '__main__':
     process_video("videoplayback.mp4")
 
     # PaddleLayout()
+
+
+
+def PaddleProcessMath():
+    from paddlex import create_pipeline
+
+    pipeline = create_pipeline(pipeline="formula_recognition")
+
+    output = pipeline.predict(
+        input="./Screenshot1.png",
+        use_layout_detection=True ,
+        use_doc_orientation_classify=False, #we can say yes, but prolly inef
+        use_doc_unwarping=False, # we can do yes, but probably inef
+        layout_threshold=0.5,
+        layout_nms=True,
+        layout_unclip_ratio=1.0,
+        layout_merge_bboxes_mode="large"
+    )
+    for res in output:
+        # res.print()
+        # res.save_to_img(save_path="./layout_output/")
+        res.save_to_json(save_path="./layout_output/")
 
