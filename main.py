@@ -1,9 +1,7 @@
 from google import genai
 from google.genai import types
 from PIL import Image
-from io import BytesIO
-import base64
-from key import TOKEN
+
 
 class gemini:
     def __init__(self, token):
@@ -24,6 +22,8 @@ class gemini:
         )
 
         print(img_response.text)
+
+
 
 #This generates an image.
 '''
