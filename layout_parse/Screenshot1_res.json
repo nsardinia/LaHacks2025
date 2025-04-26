@@ -1,0 +1,294 @@
+{
+    "input_path": "./Screenshot1.png",
+    "page_index": null,
+    "model_settings": {
+        "use_doc_preprocessor": false,
+        "use_general_ocr": true,
+        "use_seal_recognition": true,
+        "use_table_recognition": true,
+        "use_formula_recognition": false
+    },
+    "parsing_res_list": [
+        {
+            "block_bbox": [
+                0,
+                1.2034380435943604,
+                1071.7723388671875,
+                1325.7958984375
+            ],
+            "block_label": "image",
+            "block_content": "poop.\nHello\nbahana\ngrapes\nofan"
+        }
+    ],
+    "layout_det_res": {
+        "input_path": null,
+        "page_index": null,
+        "boxes": [
+            {
+                "cls_id": 1,
+                "label": "image",
+                "score": 0.985724687576294,
+                "coordinate": [
+                    0,
+                    1.2034380435943604,
+                    1071.7723388671875,
+                    1325.7958984375
+                ]
+            }
+        ]
+    },
+    "overall_ocr_res": {
+        "input_path": null,
+        "page_index": null,
+        "model_settings": {
+            "use_doc_preprocessor": false,
+            "use_textline_orientation": false
+        },
+        "dt_polys": [
+            [
+                [
+                    204,
+                    126
+                ],
+                [
+                    411,
+                    1
+                ],
+                [
+                    465,
+                    88
+                ],
+                [
+                    257,
+                    213
+                ]
+            ],
+            [
+                [
+                    638,
+                    672
+                ],
+                [
+                    849,
+                    666
+                ],
+                [
+                    853,
+                    776
+                ],
+                [
+                    642,
+                    783
+                ]
+            ],
+            [
+                [
+                    112,
+                    702
+                ],
+                [
+                    435,
+                    810
+                ],
+                [
+                    408,
+                    887
+                ],
+                [
+                    86,
+                    779
+                ]
+            ],
+            [
+                [
+                    102,
+                    1110
+                ],
+                [
+                    467,
+                    1040
+                ],
+                [
+                    493,
+                    1173
+                ],
+                [
+                    128,
+                    1243
+                ]
+            ],
+            [
+                [
+                    678,
+                    1194
+                ],
+                [
+                    850,
+                    1066
+                ],
+                [
+                    904,
+                    1137
+                ],
+                [
+                    731,
+                    1265
+                ]
+            ]
+        ],
+        "text_det_params": {
+            "limit_side_len": 960,
+            "limit_type": "max",
+            "thresh": 0.3,
+            "box_thresh": 0.6,
+            "unclip_ratio": 2.0
+        },
+        "text_type": "general",
+        "textline_orientation_angles": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "text_rec_score_thresh": 0,
+        "rec_texts": [
+            "poop.",
+            "Hello",
+            "bahana",
+            "grapes",
+            "ofan"
+        ],
+        "rec_scores": [
+            0.9633796811103821,
+            0.9954770803451538,
+            0.777920663356781,
+            0.9614899158477783,
+            0.8695624470710754
+        ],
+        "rec_polys": [
+            [
+                [
+                    204,
+                    126
+                ],
+                [
+                    411,
+                    1
+                ],
+                [
+                    465,
+                    88
+                ],
+                [
+                    257,
+                    213
+                ]
+            ],
+            [
+                [
+                    638,
+                    672
+                ],
+                [
+                    849,
+                    666
+                ],
+                [
+                    853,
+                    776
+                ],
+                [
+                    642,
+                    783
+                ]
+            ],
+            [
+                [
+                    112,
+                    702
+                ],
+                [
+                    435,
+                    810
+                ],
+                [
+                    408,
+                    887
+                ],
+                [
+                    86,
+                    779
+                ]
+            ],
+            [
+                [
+                    102,
+                    1110
+                ],
+                [
+                    467,
+                    1040
+                ],
+                [
+                    493,
+                    1173
+                ],
+                [
+                    128,
+                    1243
+                ]
+            ],
+            [
+                [
+                    678,
+                    1194
+                ],
+                [
+                    850,
+                    1066
+                ],
+                [
+                    904,
+                    1137
+                ],
+                [
+                    731,
+                    1265
+                ]
+            ]
+        ],
+        "rec_boxes": [
+            [
+                204,
+                1,
+                465,
+                213
+            ],
+            [
+                638,
+                666,
+                853,
+                783
+            ],
+            [
+                86,
+                702,
+                435,
+                887
+            ],
+            [
+                102,
+                1040,
+                493,
+                1243
+            ],
+            [
+                678,
+                1066,
+                904,
+                1265
+            ]
+        ]
+    }
+}

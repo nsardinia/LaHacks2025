@@ -1,0 +1,294 @@
+{
+    "input_path": "./Screenshot2.png",
+    "page_index": null,
+    "model_settings": {
+        "use_doc_preprocessor": false,
+        "use_general_ocr": true,
+        "use_seal_recognition": true,
+        "use_table_recognition": true,
+        "use_formula_recognition": false
+    },
+    "parsing_res_list": [
+        {
+            "block_bbox": [
+                0,
+                0,
+                1185.901611328125,
+                1670.2081298828125
+            ],
+            "block_label": "image",
+            "block_content": "poop.\nHello\nhanana\ngrapes\norange"
+        }
+    ],
+    "layout_det_res": {
+        "input_path": null,
+        "page_index": null,
+        "boxes": [
+            {
+                "cls_id": 1,
+                "label": "image",
+                "score": 0.9863372445106506,
+                "coordinate": [
+                    0,
+                    0,
+                    1185.901611328125,
+                    1670.2081298828125
+                ]
+            }
+        ]
+    },
+    "overall_ocr_res": {
+        "input_path": null,
+        "page_index": null,
+        "model_settings": {
+            "use_doc_preprocessor": false,
+            "use_textline_orientation": false
+        },
+        "dt_polys": [
+            [
+                [
+                    173,
+                    295
+                ],
+                [
+                    408,
+                    144
+                ],
+                [
+                    472,
+                    242
+                ],
+                [
+                    237,
+                    392
+                ]
+            ],
+            [
+                [
+                    668,
+                    915
+                ],
+                [
+                    909,
+                    907
+                ],
+                [
+                    914,
+                    1035
+                ],
+                [
+                    672,
+                    1043
+                ]
+            ],
+            [
+                [
+                    71,
+                    948
+                ],
+                [
+                    438,
+                    1074
+                ],
+                [
+                    406,
+                    1166
+                ],
+                [
+                    39,
+                    1039
+                ]
+            ],
+            [
+                [
+                    56,
+                    1412
+                ],
+                [
+                    479,
+                    1343
+                ],
+                [
+                    505,
+                    1500
+                ],
+                [
+                    82,
+                    1569
+                ]
+            ],
+            [
+                [
+                    694,
+                    1484
+                ],
+                [
+                    1009,
+                    1315
+                ],
+                [
+                    1077,
+                    1440
+                ],
+                [
+                    761,
+                    1608
+                ]
+            ]
+        ],
+        "text_det_params": {
+            "limit_side_len": 960,
+            "limit_type": "max",
+            "thresh": 0.3,
+            "box_thresh": 0.6,
+            "unclip_ratio": 2.0
+        },
+        "text_type": "general",
+        "textline_orientation_angles": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "text_rec_score_thresh": 0,
+        "rec_texts": [
+            "poop.",
+            "Hello",
+            "hanana",
+            "grapes",
+            "orange"
+        ],
+        "rec_scores": [
+            0.9732702970504761,
+            0.9898622632026672,
+            0.8708404898643494,
+            0.9751890301704407,
+            0.8994574546813965
+        ],
+        "rec_polys": [
+            [
+                [
+                    173,
+                    295
+                ],
+                [
+                    408,
+                    144
+                ],
+                [
+                    472,
+                    242
+                ],
+                [
+                    237,
+                    392
+                ]
+            ],
+            [
+                [
+                    668,
+                    915
+                ],
+                [
+                    909,
+                    907
+                ],
+                [
+                    914,
+                    1035
+                ],
+                [
+                    672,
+                    1043
+                ]
+            ],
+            [
+                [
+                    71,
+                    948
+                ],
+                [
+                    438,
+                    1074
+                ],
+                [
+                    406,
+                    1166
+                ],
+                [
+                    39,
+                    1039
+                ]
+            ],
+            [
+                [
+                    56,
+                    1412
+                ],
+                [
+                    479,
+                    1343
+                ],
+                [
+                    505,
+                    1500
+                ],
+                [
+                    82,
+                    1569
+                ]
+            ],
+            [
+                [
+                    694,
+                    1484
+                ],
+                [
+                    1009,
+                    1315
+                ],
+                [
+                    1077,
+                    1440
+                ],
+                [
+                    761,
+                    1608
+                ]
+            ]
+        ],
+        "rec_boxes": [
+            [
+                173,
+                144,
+                472,
+                392
+            ],
+            [
+                668,
+                907,
+                914,
+                1043
+            ],
+            [
+                39,
+                948,
+                438,
+                1166
+            ],
+            [
+                56,
+                1343,
+                505,
+                1569
+            ],
+            [
+                694,
+                1315,
+                1077,
+                1608
+            ]
+        ]
+    }
+}
