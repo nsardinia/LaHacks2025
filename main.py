@@ -6,6 +6,8 @@ from PIL import Image
 class gemini:
     def __init__(self, token):
         self.client = genai.Client(api_key=token)
+        self.content = []
+        self.summary = None
 
 
     def process(self, image):
@@ -13,15 +15,23 @@ class gemini:
         #initial read
         image = Image.open("/screenshot")
         response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=[image, "Gather the necessary/relevant text in the image."]
+            model="gemini-2.5-flash-preview-04-17",  contents=[image, "gather the information available in the text"]
         )
 
         #fill in the gaps/bad data
         img_response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the data. If unclear, label it"]
+            model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the text. If unclear, label it"]
         )
 
-        print(img_response.text)
+        self.content.append(img_response)
+
+    def process_all(self):
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=['\n'.join(self.content), "summarize the information in this text"]
+        )
+
+        self.summary =
+
 
 
 
