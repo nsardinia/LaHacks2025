@@ -5,6 +5,18 @@ import websockets
 import cv2
 import numpy as np
 
+import time
+
+
+
+# --- your code here ---
+time.sleep(3)  # simulate some work
+
+end = time.time()
+
+print(f"Elapsed time: {end - start:.2f} seconds")
+
+
 from main import gemini
 from key import TOKEN
 
@@ -33,6 +45,8 @@ async def video_receiver(websocket, gemini_):
 
 async def main(gemin):
     #FILL IN THIS IP ADDRESS 
+
+
 
     async def handler(websocket):
         await video_receiver(websocket, gemin) # Pass the instance
