@@ -12,17 +12,15 @@ from start import PaddleProcessWords
 async def video_receiver(websocket, gemini_):
     print("Client connected")
     try:
-        frame_counter = 0
+        frame_counter = 0 #it gets like 15 fps
         while True:
             data = await websocket.recv()
             # Data is expected to be binary (a JPEG image)
             nparr = np.frombuffer(data, np.uint8)
             frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            print("FLDKJFLSKDJF");
             if frame is not None:
                 frame_counter+=1
-                print(frame_counter)
-                if frame_counter >= 100: #this captures a frame every 20 seconds.
+                if frame_counter >= 100: 
                     print("PROCESSING A FRAME")
                     gemini_.process(PaddleProcessWords(frame))
                     frame_counter = 0
