@@ -30,7 +30,11 @@ class gemini:
             model="gemini-2.5-flash-preview-04-17",  contents=['\n'.join(self.content), "summarize the information in this text"]
         )
 
-        self.summary =
+        self.summary = response
+    
+    def get_summary(self):
+        return self.summary
+
 
 
 
