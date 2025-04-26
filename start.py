@@ -2,8 +2,7 @@
 #pip install paddleocr
 
 import cv2
-
-
+from paddleocr import PaddleOCR
 
 # Paddleocr supports Chinese, English, French, German, Korean and Japanese
 # You can set the parameter `lang` as `ch`, `en`, `french`, `german`, `korean`, `japan`
@@ -31,7 +30,7 @@ def PaddleProcessWords(img_path):
         for line in res_sorted:
             print(line)
             string += line[1][0]
-    print(string)
+    return string
 
 
 def PaddleProcessMath():
@@ -71,7 +70,7 @@ def process_video(video_path):
         if frame_number % 480 == 0:
             frame_filename = f"frame_{frame_number:04d}.jpg"
             cv2.imwrite(frame_filename, frame)
-            PaddleProcessWords(frame_filename)
+            printPaddleProcessWords(frame_filename)
 
         frame_number += 1
 
@@ -122,7 +121,8 @@ sample output
 
 
 if __name__== '__main__':
-    PaddleProcessWords('./Screenshot.png')
+    # PaddleProcessWords('./Screenshot.png')
+    process_video("videoplayback.mp4")
 
     # PaddleLayout()
 
