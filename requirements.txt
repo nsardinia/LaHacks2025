@@ -1,0 +1,4 @@
+openai-whisper
+setuptools-rust
+pydub
+moviepy==1.0.3
