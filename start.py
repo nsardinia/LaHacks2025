@@ -1,8 +1,9 @@
 #pip install paddle
 #pip install paddleocr
 
+import cv2
 
-from paddleocr import PaddleOCR, draw_ocr
+
 
 # Paddleocr supports Chinese, English, French, German, Korean and Japanese
 # You can set the parameter `lang` as `ch`, `en`, `french`, `german`, `korean`, `japan`
@@ -10,6 +11,27 @@ from paddleocr import PaddleOCR, draw_ocr
 
 
 
+def PaddleProcessWords(img_path):
+    ocr = PaddleOCR(use_angle_cls=True, lang='en') # need to run only once to download and load model into memory
+
+
+    # img_path = '/Users/bensirivallop/LA HACKS/LaHacks2025/Screenshot1.png'
+
+    result = ocr.ocr(img_path, cls=True)
+
+    res =0
+    for idx in range(len(result)):
+        res = result[idx]
+    res_sorted = None
+    if res is not None:
+        res_sorted = sorted(res, key=lambda x: (x[0][0][1], x[0][0][1]))
+
+    string = ''
+    if res_sorted is not None:
+        for line in res_sorted:
+            print(line)
+            string += line[1][0]
+    print(string)
 
 
 def PaddleProcessMath():
@@ -32,6 +54,26 @@ def PaddleProcessMath():
         # res.save_to_img(save_path="./layout_output/")
         res.save_to_json(save_path="./layout_output/")
 
+def process_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+
+    if not cap.isOpened():
+        print("Error: Could not open video.")
+        return
+
+    frame_number = 0
+    while True:
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        if frame_number % 480 == 0:
+            frame_filename = f"frame_{frame_number:04d}.jpg"
+            cv2.imwrite(frame_filename, frame)
+            PaddleProcessWords(frame_filename)
+
+        frame_number += 1
 
 
 # def PaddleLayout():
