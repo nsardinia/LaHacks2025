@@ -23,10 +23,11 @@ def PaddleProcessWords(img_path):
         res = result[idx]
     res_sorted = sorted(res, key=lambda x: (x[0][0][1], x[0][0][1]))
 
-
-
+    string = ''
     for line in res_sorted:
         print(line)
+        string += line[1][0]
+    print(string)
 
 
 def PaddleProcessMath():
@@ -97,7 +98,7 @@ sample output
 
 
 if __name__== '__main__':
-    PaddleProcessMath()
+    PaddleProcessWords('./Screenshot.png')
 
     # PaddleLayout()
 
