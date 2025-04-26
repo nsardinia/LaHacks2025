@@ -73,14 +73,9 @@ def process_video(video_path):
         if frame_number % 480 == 0:
             frame_filename = f"frame_{frame_number:04d}.jpg"
             cv2.imwrite(frame_filename, frame)
-<<<<<<< HEAD
             formatted = PaddleProcessWords(frame_filename)
             slides_info += f"Frame Number: {frame_number}\n"
             slides_info += f"{formatted}\n"
-=======
-            printPaddleProcessWords(frame_filename)
-
->>>>>>> 8ab48cd9e74313204c553b35eb5d0d0b3f99cfd6
         frame_number += 1
     
     return slides_info
