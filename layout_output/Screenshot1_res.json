@@ -1,0 +1,26 @@
+{
+    "input_path": "./Screenshot1.png",
+    "page_index": "None",
+    "model_settings": {
+        "use_doc_preprocessor": false,
+        "use_layout_detection": true
+    },
+    "layout_det_res": {
+        "input_path": null,
+        "page_index": null,
+        "boxes": [
+            {
+                "cls_id": 1,
+                "label": "image",
+                "score": 0.9561506509780884,
+                "coordinate": [
+                    0,
+                    1.08154296875,
+                    499.679931640625,
+                    572.5783081054688
+                ]
+            }
+        ]
+    },
+    "formula_res_list": []
+}
