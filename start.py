@@ -70,7 +70,7 @@ def process_video(video_path):
         if frame_number % 480 == 0:
             frame_filename = f"frame_{frame_number:04d}.jpg"
             cv2.imwrite(frame_filename, frame)
-            printPaddleProcessWords(frame_filename)
+            print(PaddleProcessWords(frame_filename))
 
         frame_number += 1
 
