@@ -29,9 +29,11 @@ def PaddleProcessWords(img_path):
     string = ''
     if res_sorted is not None:
         for line in res_sorted:
-            print(line)
-            string += line[1][0]
-    print(string)
+            formatted_line = f"Text: {line[1][0]}, Confidence: {line[1][1]}"
+            print(formatted_line)
+            string += formatted_line
+            string += "\n"
+    return string
 
 
 def PaddleProcessMath():
@@ -50,7 +52,7 @@ def PaddleProcessMath():
         layout_merge_bboxes_mode="large"
     )
     for res in output:
-        res.print()
+        # res.print()
         # res.save_to_img(save_path="./layout_output/")
         res.save_to_json(save_path="./layout_output/")
 
@@ -61,6 +63,7 @@ def process_video(video_path):
         print("Error: Could not open video.")
         return
 
+    slides_info = ""
     frame_number = 0
     while True:
         ret, frame = cap.read()
@@ -71,9 +74,12 @@ def process_video(video_path):
         if frame_number % 480 == 0:
             frame_filename = f"frame_{frame_number:04d}.jpg"
             cv2.imwrite(frame_filename, frame)
-            PaddleProcessWords(frame_filename)
-
+            formatted = PaddleProcessWords(frame_filename)
+            slides_info += f"Frame Number: {frame_number}\n"
+            slides_info += f"{formatted}\n"
         frame_number += 1
+    
+    return slides_info
 
 
 # def PaddleLayout():
