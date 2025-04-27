@@ -29,29 +29,28 @@ def save_clips_to_db(clips):
     conn = sqlite3.connect('clips.db')
     c = conn.cursor()
 
-    # Ensure the table exists
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS clips (
-            video_path TEXT,
-            start_time INTEGER,
-            end_time INTEGER,
-            transcription TEXT,
-            notes TEXT,
-            tags TEXT
-        )
-    ''')
-
     for clip in clips:
-        # Convert the tags list to a string
         tags_str = json.dumps(clip['tags'])
 
+        # First try UPDATE
         c.execute('''
-            INSERT OR IGNORE INTO clips (video_path, start_time, end_time, transcription, notes, tags)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], clip['notes'], tags_str))
+            UPDATE clips
+            SET transcription = ?, notes = ?, tags = ?
+            WHERE video_path = ? AND start_time = ? AND end_time = ?
+        ''', (clip['transcription'], clip['notes'], tags_str, clip['video_path'], clip['start_time'], clip['end_time']))
+
+        if c.rowcount == 0:
+            # No existing row matched -> INSERT
+            c.execute('''
+                INSERT INTO clips (video_path, start_time, end_time, transcription, notes, tags)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], clip['notes'], tags_str))
 
     conn.commit()
     conn.close()
+
+    print_all_clips()
+
 
 def search_by_tag(tag_query: str) -> List[str]:
     conn = sqlite3.connect('clips.db')
