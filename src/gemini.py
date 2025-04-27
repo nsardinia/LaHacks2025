@@ -12,7 +12,7 @@ class gemini:
 
 
 
-    def process(self, string):
+    def process(self):
 
         #not used anymore because we use paddle for word recog
         # #initial read

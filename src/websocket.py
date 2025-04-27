@@ -12,6 +12,7 @@ from typing import List
 from moviepy.editor import VideoFileClip
 from google import genai
 import gemini
+import csv
 
 # Load environment variables (API key for Gemini)
 from dotenv import load_dotenv
@@ -166,6 +167,8 @@ class StreamProcessor:
         
         if self.clips:
             await self.tag_clips()
+
+        all_process()
             
         return self.clips
 
@@ -255,6 +258,8 @@ def all_process():
     a = len(ai.content)
     header= []
     for i in range(a):
-        header.append((i, i*10, (i+1)*10))
+        header.append((i+1, i*10, (i+1)*10))
     data = [header, ai.get_keywords(), ai.content]
-    
+    with open('output.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
