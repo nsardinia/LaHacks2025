@@ -87,6 +87,7 @@ def search_by_tag(tag_query: str) -> List[str]:
     # Return only the video paths, sorted by highest score
     return [video_path for video_path, _ in video_paths]
 
+
 def print_all_clips():
     conn = sqlite3.connect('clips.db')
     c = conn.cursor()
@@ -119,5 +120,50 @@ def print_all_clips():
         print(f"Tags: {tags}")
         print("-" * 50)
 
+def generate_cards():
+    conn = sqlite3.connect('clips.db')
+    c = conn.cursor()
+
+    # Fetch all rows from the clips table
+    c.execute('''
+        SELECT id, video_path, start_time, end_time, transcription, notes, tags
+        FROM clips
+    ''')
+
+    rows = c.fetchall()
+    conn.close()
+
+    return rows
+
+def get_all_tag_names() -> List[str]:
+    conn = sqlite3.connect('clips.db')
+    c = conn.cursor()
+
+    # Fetch all tags from the clips table
+    c.execute('''
+        SELECT tags
+        FROM clips
+    ''')
+
+    rows = c.fetchall()
+    conn.close()
+
+    tag_names = set()
+
+    for (tags_str,) in rows:
+        if tags_str:
+            try:
+                tags = json.loads(tags_str)
+            except json.JSONDecodeError:
+                tags = []
+            for tag in tags:
+                if isinstance(tag, dict) and 'tag' in tag:
+                    tag_names.add(tag['tag'])
+
+    return list(tag_names)
+
+
+print(get_all_tag_names())
+
 # Call this function to print all clips
-print_all_clips()
+#print_all_clips()
