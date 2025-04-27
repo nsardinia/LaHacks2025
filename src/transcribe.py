@@ -5,12 +5,13 @@ import os
 import json
 import re
 from moviepy.editor import VideoFileClip
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from google import genai
+from key import TOKEN
 
 # Load environment variables
-load_dotenv()
-api_key = os.getenv("API_KEY")
+# load_dotenv()
+api_key = TOKEN
 
 # Initialize models
 model = whisper.load_model("small")

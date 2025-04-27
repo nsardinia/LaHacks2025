@@ -15,6 +15,7 @@ c.execute('''
             start_time INTEGER NOT NULL,
             end_time INTEGER NOT NULL,
             transcription TEXT,
+            notes TEXT,
             tags TEXT,
             UNIQUE(video_path, start_time, end_time)
         )
@@ -35,6 +36,7 @@ def save_clips_to_db(clips):
             start_time INTEGER,
             end_time INTEGER,
             transcription TEXT,
+            notes TEXT,
             tags TEXT
         )
     ''')
@@ -44,9 +46,9 @@ def save_clips_to_db(clips):
         tags_str = json.dumps(clip['tags'])
 
         c.execute('''
-            INSERT OR IGNORE INTO clips (video_path, start_time, end_time, transcription, tags)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], tags_str))
+            INSERT OR IGNORE INTO clips (video_path, start_time, end_time, transcription, notes, tags)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], clip['notes'], tags_str))
 
     conn.commit()
     conn.close()
@@ -92,7 +94,7 @@ def print_all_clips():
 
     # Fetch all rows from the clips table
     c.execute('''
-        SELECT id, video_path, start_time, end_time, transcription, tags
+        SELECT id, video_path, start_time, end_time, transcription, notes, tags
         FROM clips
     ''')
 
@@ -101,7 +103,7 @@ def print_all_clips():
 
     # Print each row
     for row in rows:
-        id, video_path, start_time, end_time, transcription, tags_str = row
+        id, video_path, start_time, end_time, transcription, notes, tags_str = row
         # Convert the tags_str back to a list of tags
         try:
             tags = json.loads(tags_str)
@@ -114,6 +116,7 @@ def print_all_clips():
         print(f"Start Time: {start_time}")
         print(f"End Time: {end_time}")
         print(f"Transcription: {transcription}")
+        print(f"Notes: {notes}")
         print(f"Tags: {tags}")
         print("-" * 50)
 

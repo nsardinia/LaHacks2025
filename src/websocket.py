@@ -13,11 +13,12 @@ from moviepy.editor import VideoFileClip
 from google import genai
 import gemini
 import csv
+from key import TOKEN
 
 # Load environment variables (API key for Gemini)
-from dotenv import load_dotenv
-load_dotenv()
-api_key = os.getenv("API_KEY")
+# from dotenv import load_dotenv
+# load_dotenv()
+api_key = TOKEN
 
 
 # Initialize models

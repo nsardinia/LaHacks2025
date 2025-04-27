@@ -9,4 +9,5 @@ class Clip(TypedDict):
     start_time: int
     end_time: int
     transcription: str
+    notes: str
     tags: List[Tag]

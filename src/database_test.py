@@ -30,6 +30,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=10,
             end_time=20,
             transcription="This is a test transcription.",
+            notes="APSL",
             tags=[{"tag": "test", "score": 0.5}, {"tag": "clip", "score": 0.8}]
         )
 
@@ -38,6 +39,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=30,
             end_time=40,
             transcription="Another test transcription.",
+            notes="grape",
             tags=[{"tag": "demo", "score": 0.9}, {"tag": "clip", "score": 0.7}]
         )
 
@@ -61,6 +63,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=10,
             end_time=20,
             transcription="This is a test transcription.",
+            notes = "",
             tags=[{"tag": "funny", "score": 0.8}, {"tag": "clip", "score": 0.6}]
         )
 
@@ -69,6 +72,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=30,
             end_time=40,
             transcription="Another test transcription.",
+            notes = "banananananananana",
             tags=[{"tag": "serious", "score": 0.9}, {"tag": "clip", "score": 0.7}]
         )
 

@@ -4,12 +4,16 @@ import streamlit as st
 import numpy as np
 import tempfile
 import pandas as pd
-
+import os
+from database import save_clips_to_db
 
 # Import the sidebar from the other file
 from sidebar import show_sidebar
+from video_file import VideoFileProcessor
 
-
+upload_dir = "videos"
+os.makedirs(upload_dir, exist_ok = True)
+VideoProcessor = VideoFileProcessor(10)
 def main():
     st.set_page_config(layout="wide")  # Wide layout
 
@@ -23,11 +27,20 @@ def main():
         # Display video player above upload button if video is uploaded
         if uploaded_video is not None:
             # Save the uploaded video temporarily
-            tfile = tempfile.NamedTemporaryFile(delete=False)
-            tfile.write(uploaded_video.read())
+            vid = os.path.join(upload_dir, uploaded_video.name)
+            with open(vid, 'wb') as f:
+                f.write(uploaded_video.read())
+
 
             # Display the video above the upload button
-            videoslot.video(tfile.name)
+            videoslot.video(vid)
+
+            #processing the vide
+            clips = VideoProcessor.process_video(vid)
+            save_clips_to_db(clips)
+
+            videoslot.empty()
+
 
         # Use a text_input to get the keywords to filter the dataframe
         text_search = st.text_input("Search videos by title or speaker", value="")

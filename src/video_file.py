@@ -7,17 +7,16 @@ import whisper
 from moviepy.editor import VideoFileClip
 from google import genai
 import gemini
+from key import TOKEN
 from gemini import PaddleProcessWords
 
 # Load environment variables (API key for Gemini)
-from dotenv import load_dotenv
-load_dotenv()
-api_key = os.getenv("API_KEY")
+api_key = TOKEN
 
 # Initialize models
 whisper_model = whisper.load_model("small")
 client = genai.Client(api_key=api_key)
-ai = gemini(api_key)
+ai = gemini.gemini(api_key)
 
 class VideoFileProcessor:
     def __init__(self, clip_duration=10):
@@ -84,7 +83,7 @@ class VideoFileProcessor:
                         'start_time': start_time,
                         'end_time': end_time,
                         'transcription': transcription,
-                        'notes': ai.process(PaddleProcessWords(frame)),
+                        'notes': str(ai.process(PaddleProcessWords(frame))),
                         'tags': []
                     }
                     
