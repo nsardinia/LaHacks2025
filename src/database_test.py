@@ -30,7 +30,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=10,
             end_time=20,
             transcription="This is a test transcription.",
-            tags=[{"tag": "test"}, {"tag": "clip"}]
+            tags=[{"tag": "test", "score": 0.5}, {"tag": "clip", "score": 0.8}]
         )
 
         clip2 = Clip(
@@ -38,7 +38,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=30,
             end_time=40,
             transcription="Another test transcription.",
-            tags=[{"tag": "demo"}, {"tag": "clip"}]
+            tags=[{"tag": "demo", "score": 0.9}, {"tag": "clip", "score": 0.7}]
         )
 
         save_clips_to_db([clip1, clip2])
@@ -50,6 +50,10 @@ class TestDatabaseFunctions(unittest.TestCase):
             print(result)
         self.assertGreater(len(results), 0, "No clips found with the tag 'clip'.")
 
+        # Check if the video paths are sorted by the highest tag score
+        # Since the highest score for "clip" is 0.8 for video1.mp4 and 0.9 for video2.mp4
+        self.assertEqual(results[0], "video2.mp4", "The first result should be video2.mp4.")
+
     def test_search_by_tag(self):
         """Test the functionality of searching clips by tag."""
         clip1 = Clip(
@@ -57,7 +61,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=10,
             end_time=20,
             transcription="This is a test transcription.",
-            tags=[{"tag": "funny"}, {"tag": "clip"}]
+            tags=[{"tag": "funny", "score": 0.8}, {"tag": "clip", "score": 0.6}]
         )
 
         clip2 = Clip(
@@ -65,7 +69,7 @@ class TestDatabaseFunctions(unittest.TestCase):
             start_time=30,
             end_time=40,
             transcription="Another test transcription.",
-            tags=[{"tag": "serious"}, {"tag": "clip"}]
+            tags=[{"tag": "serious", "score": 0.9}, {"tag": "clip", "score": 0.7}]
         )
 
         save_clips_to_db([clip1, clip2])

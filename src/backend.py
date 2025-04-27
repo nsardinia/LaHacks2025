@@ -6,5 +6,3 @@ async def start_websocket():
         print("WebSocket server started on ws://0.0.0.0:8765")
         await asyncio.Future()  # run forever
 
-def get_videos():
-    

@@ -1,5 +1,7 @@
 import sqlite3
 from utils import Tag, Clip 
+from typing import List
+import json
 
 # Create a connection (makes a file "clips.db")
 conn = sqlite3.connect('clips.db')
@@ -22,27 +24,39 @@ conn.commit()
 conn.close()
 
 # Save a clip to the database
-
-def save_clips_to_db(clips: list[Clip]) -> None:
+def save_clips_to_db(clips):
     conn = sqlite3.connect('clips.db')
     c = conn.cursor()
 
+    # Ensure the table exists
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS clips (
+            video_path TEXT,
+            start_time INTEGER,
+            end_time INTEGER,
+            transcription TEXT,
+            tags TEXT
+        )
+    ''')
+
     for clip in clips:
-        tags_text = ",".join([t['tag'] for t in clip['tags']])
+        # Convert the tags list to a string
+        tags_str = json.dumps(clip['tags'])
+
         c.execute('''
-            INSERT INTO clips (video_path, start_time, end_time, transcription, tags)
+            INSERT OR IGNORE INTO clips (video_path, start_time, end_time, transcription, tags)
             VALUES (?, ?, ?, ?, ?)
-        ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], tags_text))
+        ''', (clip['video_path'], clip['start_time'], clip['end_time'], clip['transcription'], tags_str))
 
     conn.commit()
     conn.close()
 
-def search_by_tag(tag_query):
+def search_by_tag(tag_query: str) -> List[str]:
     conn = sqlite3.connect('clips.db')
     c = conn.cursor()
 
     c.execute('''
-        SELECT video_path, start_time, end_time, transcription, tags
+        SELECT video_path, tags
         FROM clips
         WHERE tags LIKE ?
     ''', ('%' + tag_query + '%',))
@@ -50,4 +64,58 @@ def search_by_tag(tag_query):
     results = c.fetchall()
     conn.close()
 
-    return results
+    video_paths = []
+
+    for video_path, tags_str in results:
+        # Assuming `tags_str` is a string representation of the list of tags
+        try:
+            # Convert the tags_str to a list of dictionaries (e.g., [{"tag": "funny", "score": 0.9}])
+            tags = eval(tags_str)
+        except:
+            tags = []
+
+        # Check if any tag matches the query and has a score, if so, add to the list
+        if any(tag['tag'] == tag_query for tag in tags):
+            # Sort by the highest tag score
+            highest_score = max(tag['score'] for tag in tags if 'score' in tag)
+            video_paths.append((video_path, highest_score))
+
+    # Sort the video paths by the highest tag score in descending order
+    video_paths.sort(key=lambda x: x[1], reverse=True)
+
+    # Return only the video paths, sorted by highest score
+    return [video_path for video_path, _ in video_paths]
+
+def print_all_clips():
+    conn = sqlite3.connect('clips.db')
+    c = conn.cursor()
+
+    # Fetch all rows from the clips table
+    c.execute('''
+        SELECT id, video_path, start_time, end_time, transcription, tags
+        FROM clips
+    ''')
+
+    rows = c.fetchall()
+    conn.close()
+
+    # Print each row
+    for row in rows:
+        id, video_path, start_time, end_time, transcription, tags_str = row
+        # Convert the tags_str back to a list of tags
+        try:
+            tags = json.loads(tags_str)
+        except json.JSONDecodeError:
+            tags = []
+
+        # Print the clip details
+        print(f"ID: {id}")
+        print(f"Video Path: {video_path}")
+        print(f"Start Time: {start_time}")
+        print(f"End Time: {end_time}")
+        print(f"Transcription: {transcription}")
+        print(f"Tags: {tags}")
+        print("-" * 50)
+
+# Call this function to print all clips
+print_all_clips()
