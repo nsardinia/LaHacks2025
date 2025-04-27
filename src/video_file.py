@@ -65,7 +65,7 @@ class VideoFileProcessor:
                     audio_path = tmp_audio.name
                     
                     # Extract audio
-                    print("WE GOT HERE")
+
                     has_audio = self.extract_audio_segment(video_path, start_time, end_time, audio_path)
                     
                     if has_audio:
@@ -73,11 +73,9 @@ class VideoFileProcessor:
                         transcription = self.transcribe_audio(audio_path)
                     else:
                         transcription = ""  # No audio to transcribe
-                    print("WE GOT HER2E")                
+            
                     frame = video.get_frame(end_time)
-                    
-                    print(frame)
-                        
+                                            
                     # Create clip object
                     clip = {
                         'video_path': video_path,
@@ -88,7 +86,7 @@ class VideoFileProcessor:
                         'tags': []
                     }
                     
-                    print("WE GOT HfefeERE")
+
                     clips.append(clip)
                     # Clean up audio file
                     os.unlink(audio_path)

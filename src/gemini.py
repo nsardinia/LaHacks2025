@@ -1,6 +1,6 @@
 from google import genai
-from google.genai import types
-from PIL import Image
+# from google.genai import types
+# from PIL import Image
 
 from key import TOKEN
 from paddleocr import PaddleOCR
@@ -120,7 +120,7 @@ def PaddleProcessWords(img_path):
 
     if not results or results[0] is None:
         print("OCR returned None or empty.")
-        return"  # or handle accordingly
+        return ""  # or handle accordingly
 
     res = results[0]
     res = [line for line in res if line is not None]
