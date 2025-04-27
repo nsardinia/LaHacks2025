@@ -29,13 +29,11 @@ class gemini:
             "Formate your response like this: \n"
             "Notes: ..."
         )
-        print("test")
         prompt += "Here is the string from OCR: " + string + "."
 
         img_response = self.client.models.generate_content(
             model="gemini-2.0-flash",  contents=prompt
         )
-        print(img_response.text)
         return img_response.text
 
     def process_all(self):
@@ -52,7 +50,6 @@ class gemini:
         response = self.client.models.generate_content(
             model="gemini-2.5-flash-preview-04-17", contents=f"Based on the following texts and their confidence score, refine them. The lower the confidence score, the more you have to correct it to make sense and repair any hallucinations. For example, if a math equation is written erroneously and also has a low confidence score, you should correct the text to make the math equation correct. If the confidence score is high and the text makes sense, do nothing to it. {text}"
         )
-        print(response.text)
 
     def prompt(self, string):
         response = self.client.models.generate_content(
@@ -119,14 +116,14 @@ from paddleocr import PaddleOCR
 def PaddleProcessWords(img_path):
     ocr = PaddleOCR(use_angle_cls=True, lang='en', show_log=False)  # load model once
 
-    # Run OCR
     results = ocr.ocr(img_path, cls=True)
 
-    if not results:
-        return ""
+    if not results or results[0] is None:
+        print("OCR returned None or empty.")
+        return"  # or handle accordingly
 
     res = results[0]
-    res = [line for line in res if line is not None]  # filter out None
+    res = [line for line in res if line is not None]
     res_sorted = sorted(res, key=lambda x: x[0][0][1])
 
 
