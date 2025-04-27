@@ -5,8 +5,9 @@ import numpy as np
 import tempfile
 import pandas as pd
 import os
-from database import save_clips_to_db
-
+from database import save_clips_to_db, get_all_tag_names, generate_cards
+from google import genai
+from key import TOKEN
 # Import the sidebar from the other file
 from sidebar import show_sidebar
 from video_file import VideoFileProcessor
@@ -14,6 +15,29 @@ from video_file import VideoFileProcessor
 upload_dir = "videos"
 os.makedirs(upload_dir, exist_ok = True)
 VideoProcessor = VideoFileProcessor(10)
+
+api_key = TOKEN
+
+client = genai.Client(api_key=api_key)
+def getBestTagFromGemini(userPrompt, tags):
+        print("test")
+        prompt = (
+            "You are given a list of tags and a user query.\n"
+            f"list of tags: {tags}, user query: {userPrompt}\n"
+            "Return the tag that most closely aligns with the user query\n"
+            "return the chosen tag name only for example: tag\n"
+            
+            "...\n\n"
+        )
+
+        print("test2")
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
+
+        print(response.text)
+        return response.text   
 def main():
     st.set_page_config(layout="wide")  # Wide layout
 
@@ -48,24 +72,17 @@ def main():
         # mock the video dataframe
 
         # List of lists (rows)
-        dataVids = [
-            [1, 'Intro', 23],
-            [2, 'Kinematics', 30],
-            [3, 'Quantam Mechanics', 35],
-            [4, 'Thermodynamics', 40],
-            [5, 'Electromagnetism', 45],
-            [6, 'Fluid Dynamics', 50],
-            [7, 'Optics', 55],
-            [8, 'Nuclear Physics', 60],
-            [9, 'Astrophysics', 65],
-            [10, 'Quantum Computing', 70]
-        ]
+        dataVids = generate_cards()
 
         # Create DataFrame from list of lists
-        df = pd.DataFrame(dataVids, columns=['Timestamp', 'Topic', 'Rand'])
-
+        df = pd.DataFrame(dataVids, columns=['id', 'video_path', 'start_time', 'end_time', 'transcription', 'notes',
+                                              'tags'])
+        
         # Filter the dataframe using masks
-        m2 = df["Topic"].str.contains(text_search)
+        if (text_search == ""):
+            m2 = df["tags"].str.contains("")
+        else:
+            m2 = df["tags"].str.contains(str(getBestTagFromGemini(text_search, get_all_tag_names())).strip())
         df_search = df[m2]
 
         N_cards_per_row = 3
@@ -77,9 +94,9 @@ def main():
                 cols = st.columns(N_cards_per_row, gap="large")
             # draw the card
             with cols[n_row%N_cards_per_row]:
-                st.markdown(f"**{str(row['Timestamp']).strip()}**")
-                st.markdown(f"*{row['Topic'].strip()}*")
-                st.markdown(f"**{str(row['Rand'])}**")
+                st.markdown(f"**{str(row['id']).strip()}**")
+                st.markdown(f"*{row['tags'].strip()}*")
+                st.markdown(f"**{str(row['start_time'])}**")
 
 
 
