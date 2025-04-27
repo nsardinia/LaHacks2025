@@ -1,6 +1,10 @@
 # main.py
 
 import streamlit as st
+from moviepy.editor import VideoFileClip
+import io
+import base64
+from PIL import Image
 import numpy as np
 import tempfile
 import pandas as pd
@@ -11,6 +15,9 @@ from key import TOKEN
 # Import the sidebar from the other file
 from sidebar import show_sidebar
 from video_file import VideoFileProcessor
+
+
+speedupImages = {}
 
 upload_dir = "videos"
 os.makedirs(upload_dir, exist_ok = True)
@@ -37,6 +44,8 @@ def getBestTagFromGemini(userPrompt, tags):
 
         #print(response.text)
         return response.text   
+
+
 def main():
     st.set_page_config(layout="wide")  # Wide layout
 
@@ -61,9 +70,6 @@ def main():
             #processing the vide
             clips = VideoProcessor.process_video(vid)
             save_clips_to_db(clips)
-
-            videoslot.empty()
-
 
         # Use a text_input to get the keywords to filter the dataframe
         text_search = st.text_input("Search videos by title or speaker", value="")
@@ -93,12 +99,22 @@ def main():
                 cols = st.columns(N_cards_per_row, gap="large")
             # draw the card
             with cols[n_row%N_cards_per_row]:
-                st.markdown(f"**{str(row['id']).strip()}**")
-                st.markdown(f"*{row['tags'].strip()}*")
-                st.markdown(f"**{str(row['start_time'])}**")
+                #st.markdown(f"*{row['tags'].strip()}*")
+                video_path = row['video_path']
+                if True:
+                    
+                    timestamp_seconds = 5  # Frame at 5 seconds
 
+                    clip = VideoFileClip("videos\\test_lecture.mp4")
 
+                    # Get frame (returns a numpy array)
+                    frame = clip.get_frame(row['start_time'])
 
+                    # Convert to PIL Image
+                    img = Image.fromarray(frame)
+                    
+                    st.image(img, width=100)
+                    clip.close()
 
     with col2:
          # List of lists (rows)
@@ -115,7 +131,7 @@ def main():
 
     # Custom box style using Markdown and HTML
 def generate_summary(transcript_notes_list):
-        print(transcript_notes_list)
+        #print(transcript_notes_list)
         prompt = (
             "You are given some transcripts and some handwriting recognition notes\n"
             f"{transcript_notes_list}\n"
