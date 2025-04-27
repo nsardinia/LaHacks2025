@@ -6,34 +6,27 @@ class gemini:
     def __init__(self, token, text=None):
         self.client = genai.Client(api_key=token)
         self.content=[]
-        self.summary = None
         self.text = text
         self.keywords = []
 
 
 
-    def process(self):
+    def process(self, string):
 
         #not used anymore because we use paddle for word recog
         # #initial read
         # image = Image.open("/screenshot")
-        # response = self.client.models.generate_content(
-        #     model="gemini-2.5-flash-preview-04-17",  contents=[image, "gather the information available in the text"]
-        # )
-
-        #fill in the gaps/bad data
-        img_response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=[img_response, "find and fix errors in the text. If unclear, label it"]
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=[string, "gather the information available in the text"]
         )
+
+        img_response = self.client.models.generate_content(
+            model="gemini-2.5-flash-preview-04-17",  contents=[response, "find and fix errors in the text. If unclear, label it"]
+        )
+
 
         self.content.append(img_response)
-
-    def process_all(self):
-        response = self.client.models.generate_content(
-            model="gemini-2.5-flash-preview-04-17",  contents=['\n'.join(self.content), "summarize the information in this text"]
-        )
-
-        self.summary = response
+        return img_response
 
     def get_keywords(self):
         for i,j in enumerate(self.content):
@@ -45,17 +38,6 @@ class gemini:
         return self.keywords
 
 
-
-    
-    def get_summary(self):
-        return self.summary
-    
-    def refine(self):
-        for i in range(len(self.content)):
-            response = self.client.models.generate_content(
-                model="gemini-2.5-flash-preview-04-17", contents=f"Based on the following texts and their confidence score, refine them. The lower the confidence score, the more you have to correct it to make sense and repair any hallucinations. For example, if a math equation is written erroneously and also has a low confidence score, you should correct the text to make the math equation correct. If the confidence score is high and the text makes sense, do nothing to it.\n{self.content[i]}"
-            )
-            self.content[i] = response
     
 
     def prompt(self, string):
