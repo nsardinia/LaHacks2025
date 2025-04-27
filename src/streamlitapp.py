@@ -1,6 +1,10 @@
 # main.py
 
 import streamlit as st
+from moviepy.editor import VideoFileClip
+import io
+import base64
+from PIL import Image
 import numpy as np
 import tempfile
 import pandas as pd
@@ -12,6 +16,9 @@ from key import TOKEN
 from sidebar import show_sidebar
 from video_file import VideoFileProcessor
 
+
+speedupImages = {}
+
 upload_dir = "videos"
 os.makedirs(upload_dir, exist_ok = True)
 VideoProcessor = VideoFileProcessor(10)
@@ -20,7 +27,6 @@ api_key = TOKEN
 
 client = genai.Client(api_key=api_key)
 def getBestTagFromGemini(userPrompt, tags):
-        print("test")
         prompt = (
             "You are given a list of tags and a user query.\n"
             f"list of tags: {tags}, user query: {userPrompt}\n"
@@ -30,14 +36,16 @@ def getBestTagFromGemini(userPrompt, tags):
             "...\n\n"
         )
 
-        print("test2")
+        #print("test2")
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt
         )
 
-        print(response.text)
+        #print(response.text)
         return response.text   
+
+
 def main():
     st.set_page_config(layout="wide")  # Wide layout
 
@@ -62,9 +70,6 @@ def main():
             #processing the vide
             clips = VideoProcessor.process_video(vid)
             save_clips_to_db(clips)
-
-            videoslot.empty()
-
 
         # Use a text_input to get the keywords to filter the dataframe
         text_search = st.text_input("Search videos by title or speaker", value="")
@@ -94,15 +99,58 @@ def main():
                 cols = st.columns(N_cards_per_row, gap="large")
             # draw the card
             with cols[n_row%N_cards_per_row]:
-                st.markdown(f"**{str(row['id']).strip()}**")
-                st.markdown(f"*{row['tags'].strip()}*")
-                st.markdown(f"**{str(row['start_time'])}**")
+                #st.markdown(f"*{row['tags'].strip()}*")
+                video_path = row['video_path']
+                if True:
+                    
+                    timestamp_seconds = 5  # Frame at 5 seconds
 
+                    clip = VideoFileClip("videos\\test_lecture.mp4")
 
+                    # Get frame (returns a numpy array)
+                    frame = clip.get_frame(row['start_time'])
 
+                    # Convert to PIL Image
+                    img = Image.fromarray(frame)
+                    
+                    st.image(img, width=100)
+                    clip.close()
 
     with col2:
-        show_sidebar()  # Sidebar imported from sidebar.py
+         # List of lists (rows)
+        df_search_sidebar = df_search.copy()
+        transcript_notes_list = df_search_sidebar[["transcription", "notes"]].values.tolist()
+
+        with st.sidebar:
+            backend_text = "Nothing to show . . . yet!"
+            dataVids = generate_cards()
+
+            # Add a button here
+            if st.button("Generate Summary"):
+                add_summary = st.markdown(f"""<p>{generate_summary(transcript_notes_list)}</p>""", unsafe_allow_html=True)
+
+    # Custom box style using Markdown and HTML
+def generate_summary(transcript_notes_list):
+        #print(transcript_notes_list)
+        prompt = (
+            "You are given some transcripts and some handwriting recognition notes\n"
+            f"{transcript_notes_list}\n"
+            "Using this information, but biasing towards the transcripts, generate a summary of the information\n"
+            "Aim to present the information in a manner best for a learning student\n"
+            "Present authorative information in a clear and concise manner, do not reference the transcripts or notes\n",
+            "Even if little information is given, generate a summary. Draw on external resources to produce a complete answer\n"
+            "Format your response like this: Here's a summary of the information from your resources\n"
+            "...\n\n"
+        )
+
+        #print("test2")
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
+
+        #print(response.text)
+        return response.text 
 
 if __name__ == "__main__":
     main()

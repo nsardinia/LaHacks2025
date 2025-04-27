@@ -163,7 +163,7 @@ def get_all_tag_names() -> List[str]:
     return list(tag_names)
 
 
-print(get_all_tag_names())
+#print(get_all_tag_names())
 
 # Call this function to print all clips
-#print_all_clips()
+print_all_clips()
