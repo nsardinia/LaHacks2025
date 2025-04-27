@@ -6,19 +6,23 @@ import whisper
 import tempfile
 import os
 import re
+from gemini import PaddleProcessWords
 import time
 from typing import List
 from moviepy.editor import VideoFileClip
 from google import genai
+import gemini
 
 # Load environment variables (API key for Gemini)
 from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
+
 # Initialize models
 whisper_model = whisper.load_model("small")
 client = genai.Client(api_key=api_key)
+ai = gemini(api_key)
 
 class StreamProcessor:
     def __init__(self, clip_duration=10, fps=30):
@@ -36,6 +40,7 @@ class StreamProcessor:
         self.clips = []
         self.start_time = time.time()  # Track when we started receiving frames
         self.frame_count = 0
+        self.frame_counter = 0
         
     async def process_frame(self, frame_data):
         """
@@ -51,6 +56,14 @@ class StreamProcessor:
         # Add frame to current buffer
         self.current_frames.append(frame)
         self.frame_count += 1
+        self.frame_counter += 1
+
+        # collect a single frame for processing 
+        if frame_counter >= 100: 
+            print("PROCESSING A FRAME")
+            # this one processes the frame, 1/100 frames. not sure how long it takes
+            ai.process(PaddleProcessWords(frame_data))
+            frame_counter = 0
         
         # If we've collected enough frames for a clip, process it
         if len(self.current_frames) >= self.frames_per_clip:
@@ -233,3 +246,15 @@ async def video_receiver(websocket):
         # Process any remaining frames
         final_clips = await processor.finish()
         print(f"Processed a total of {processor.frame_count} frames")
+
+
+def all_process():
+    #now we have the summary response
+    ai.refine()
+    #we have a refined array of strings
+    a = len(ai.content)
+    header= []
+    for i in range(a):
+        header.append((i, i*10, (i+1)*10))
+    data = [header, ai.get_keywords(), ai.content]
+    
