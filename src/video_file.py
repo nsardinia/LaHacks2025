@@ -6,6 +6,7 @@ from typing import List
 import whisper
 from moviepy.editor import VideoFileClip
 from google import genai
+import gemini
 
 # Load environment variables (API key for Gemini)
 from dotenv import load_dotenv
@@ -15,6 +16,7 @@ api_key = os.getenv("API_KEY")
 # Initialize models
 whisper_model = whisper.load_model("small")
 client = genai.Client(api_key=api_key)
+ai = gemini(api_key)
 
 class VideoFileProcessor:
     def __init__(self, clip_duration=10):
@@ -70,6 +72,9 @@ class VideoFileProcessor:
                         transcription = self.transcribe_audio(audio_path)
                     else:
                         transcription = ""  # No audio to transcribe
+
+                    frame = video.get_frame(end_time)
+                    
                         
                     # Create clip object
                     clip = {
@@ -77,6 +82,7 @@ class VideoFileProcessor:
                         'start_time': start_time,
                         'end_time': end_time,
                         'transcription': transcription,
+                        'notes':
                         'tags': []
                     }
                     
@@ -175,3 +181,5 @@ class VideoFileProcessor:
                 })
 
         return clips
+    
+
